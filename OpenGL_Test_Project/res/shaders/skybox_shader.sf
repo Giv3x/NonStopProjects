@@ -1,0 +1,20 @@
+#version 420
+
+uniform samplerCube cubeMapTexture;
+
+varying vec3 texCoords;
+varying float visibility;
+
+uniform vec3 fogColor;
+
+const float lowerLimit = 0;
+const float upperLimit = 300;
+
+void main() {
+	vec4 outColor = texture(cubeMapTexture, texCoords);
+	
+	float factor = (texCoords.y - lowerLimit) / (upperLimit - lowerLimit);
+	factor = clamp(factor, 0, 1);
+
+    gl_FragColor = mix(vec4(fogColor,1), outColor,  factor);
+}

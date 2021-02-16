@@ -1,0 +1,109 @@
+#version 330
+
+uniform sampler2D backgroundTexture;
+uniform sampler2D rTexture;
+uniform sampler2D gTexture;
+uniform sampler2D bTexture;
+uniform sampler2D blendMapTexture;
+
+struct LightIntensity {
+	vec3 Ld;
+	vec3 Ls;
+	vec3 La;
+};
+
+struct MaterialInfo {
+	vec3 Kd;
+	vec3 Ks;
+	vec3 Ka;
+};
+
+struct SpotLightInfo {
+	vec3 intensity;
+	vec3 direction;
+	float exponent;
+	float cutoff;
+};
+
+varying vec2 texCoords;
+varying vec3 normal;
+varying vec3 toSpotLighVector;
+varying vec3 toLightVector;
+varying vec3 toCameraVector;
+varying float visibility;
+
+uniform LightIntensity lightInfo;
+uniform SpotLightInfo spotLight;
+uniform MaterialInfo materialInfo;
+uniform vec3 fogColor;
+
+vec3 adsSpotLight() {
+	float dotSpotLight = (dot(spotLight.direction, toSpotLighVector));
+	float angle = acos(dotSpotLight);
+
+	if(angle < spotLight.cutoff) {
+		float spotFactor = pow(dotSpotLight, spotLight.exponent);
+		vec3 h = normalize(toSpotLighVector + toCameraVector);
+
+		return spotFactor * spotLight.intensity * (
+			materialInfo.Kd * max(dot(-toSpotLighVector, normal), 0) +
+			materialInfo.Ks * pow(max(dot(h, normal),0), 8)
+		);
+	}
+
+	return vec3(0);
+}
+
+vec4 phongLight(vec3 toLightVector, vec3 toCameraVector, vec3 normal) {
+	float diffuseFactor = dot(toLightVector, normal);
+
+	vec3 diffuseColor = vec3(0);
+	vec3 specularColor = vec3(0);
+	vec3 ambientColor = lightInfo.La * materialInfo.Ka;
+
+	if(diffuseFactor > 0) {
+		diffuseColor = lightInfo.Ld * materialInfo.Kd * diffuseFactor;
+
+		vec3 halfVector = normalize(toCameraVector - toLightVector);
+		float specularFactor = dot(halfVector, normal);
+
+		if(specularFactor > 0) {
+			specularFactor = pow(specularFactor, 10);
+			specularColor = lightInfo.Ls * materialInfo.Ks * specularFactor;
+		}
+	}
+
+	return vec4(diffuseColor + 0.2, 1.0); //+ ambientColor + specularColor
+}
+
+void main() {
+	vec4 blendColor = texture2D(blendMapTexture, texCoords);
+	float bgColorAmount = 1 - (blendColor.r + blendColor.g + blendColor.b);
+	vec2 tiledTexCoords = texCoords*40;
+	
+	vec4 bgColor = texture2D(backgroundTexture, tiledTexCoords)*bgColorAmount;
+	vec4 rColor = texture2D(rTexture, tiledTexCoords) * blendColor.r;
+	vec4 gColor = texture2D(gTexture, tiledTexCoords) * blendColor.g;
+	vec4 bColor = texture2D(bTexture, tiledTexCoords) * blendColor.b;
+
+	vec4 totalColor = bgColor + rColor + gColor + bColor;
+	
+	vec3 attenuation = vec3(0.008, 0.008, 0.008);
+	float distance = length(toLightVector);
+	float attFactor = attenuation.x + attenuation.y*distance + attenuation.z*distance*distance;
+
+	vec3 toLightVector1 = normalize(toLightVector);
+
+	
+	vec4 light = phongLight(toLightVector1, toCameraVector, normal);
+	//light = light/attFactor;
+
+	//TO-DO: limit max range spot light can shine forward
+	vec4 spotLightColor = vec4(0);	
+	if(toSpotLighVector.x != 101) {
+		spotLightColor = vec4(adsSpotLight(), 1.0);
+	}
+
+    gl_FragColor = mix(vec4(fogColor,1), totalColor * (light + spotLightColor), visibility);
+	
+}

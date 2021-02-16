@@ -1,0 +1,15 @@
+﻿  Source.cpp
+c:\users\ggiv3x\documents\visual studio 2015\projects\opengl_test_project\opengl_test_project\source.cpp(48): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\ggiv3x\documents\visual studio 2015\projects\opengl_test_project\opengl_test_project\source.cpp(49): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\ggiv3x\documents\visual studio 2015\projects\opengl_test_project\opengl_test_project\source.cpp(72): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\ggiv3x\documents\visual studio 2015\projects\opengl_test_project\opengl_test_project\source.cpp(73): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\ggiv3x\documents\visual studio 2015\projects\opengl_test_project\opengl_test_project\source.cpp(82): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\ggiv3x\documents\visual studio 2015\projects\opengl_test_project\opengl_test_project\source.cpp(83): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\ggiv3x\documents\visual studio 2015\projects\opengl_test_project\opengl_test_project\source.cpp(115): warning C4305: '+=': truncation from 'double' to 'float'
+c:\users\ggiv3x\documents\visual studio 2015\projects\opengl_test_project\opengl_test_project\source.cpp(116): warning C4305: '+=': truncation from 'double' to 'float'
+c:\users\ggiv3x\documents\visual studio 2015\projects\opengl_test_project\opengl_test_project\source.cpp(117): warning C4305: '+=': truncation from 'double' to 'float'
+c:\users\ggiv3x\documents\visual studio 2015\projects\opengl_test_project\opengl_test_project\source.cpp(124): warning C4305: 'argument': truncation from 'double' to 'const float'
+c:\users\ggiv3x\documents\visual studio 2015\projects\opengl_test_project\opengl_test_project\source.cpp(164): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\ggiv3x\documents\visual studio 2015\projects\opengl_test_project\opengl_test_project\source.cpp(189): warning C4305: '+=': truncation from 'double' to 'float'
+c:\users\ggiv3x\documents\visual studio 2015\projects\opengl_test_project\opengl_test_project\source.cpp(58): warning C4101: 'mouseLocation': unreferenced local variable
+  OpenGL_Test_Project.vcxproj -> C:\Users\GGiv3x\documents\visual studio 2015\Projects\OpenGL_Test_Project\x64\Debug\OpenGL_Test_Project.exe
